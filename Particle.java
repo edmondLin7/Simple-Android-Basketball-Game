@@ -9,19 +9,13 @@ public class Particle {
     private float mVelX;
     private float mVelY;
     public void updatePosition(float sx, float sy, float sz, long timestamp) {
-        Log.d("timestamp" , timestamp + "");
-        float dt = (System.nanoTime() - timestamp) / 1000000000.0f;//10000000.0f;
-        Log.d("timestampafter" ,  dt + "");
+        float dt = (System.nanoTime() - timestamp) / 1000000000.0f; 
         mVelX += -sx * dt;
-        Log.d("mVelX" ,  mVelX + "");
         mVelY += -sy * dt;
-        Log.d("mVelY" ,  mVelY + "");
         mPosX += mVelX * dt;
-        Log.d("mX" ,  mPosX + "");
         mPosY += mVelY * dt;
-        Log.d("mY" ,  mPosY + "");
-
     }
+    
     public void resolveCollisionWithBounds(float mHorizontalBound, float mVerticalBound) {
         final float xmax = mHorizontalBound;
         final float ymax = mVerticalBound;
