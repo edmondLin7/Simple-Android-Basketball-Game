@@ -1,7 +1,6 @@
 package edu.sjsu.android.accelerometer;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -10,10 +9,9 @@ import android.view.ViewManager;
 
 
 public class MainActivity extends Activity {
-    private static final String TAG = "edu.sjsu.android.accelerometer:MainActivity";
     private PowerManager.WakeLock mWakeLock;
-
     private SimulationView mSimulationView;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
