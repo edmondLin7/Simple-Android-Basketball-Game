@@ -25,23 +25,23 @@ public class SimulationView extends View implements SensorEventListener {
     private Display mDisplay;
     private SensorManager sensorManager;
     private Sensor mSensor;
-    private static final int BALL_SIZE = 64;
-    private static final int BASKET_SIZE = 80;
-    private long  mSensorTimeStamp;
     private float mXOrigin;
     private float mYOrigin;
     private float mZOrigin;
-
     private float mSensorX;
     private float mSensorY;
     private float mSensorZ;
     private float mHorizontalBound;
     private float mVerticalBound;
+    private long  mSensorTimeStamp;
+    private static final int BALL_SIZE = 64;
+    private static final int BASKET_SIZE = 80;
 
-
+    /*
+       Draws items on Screen
+    */
     public SimulationView(Context context) {
         super(context);
-        // Initialize images from drawable
         Bitmap ball = BitmapFactory.decodeResource(getResources(), R.drawable.ball);
         mBitMAP = Bitmap.createScaledBitmap(ball, BALL_SIZE, BALL_SIZE, true);
         Bitmap basket = BitmapFactory.decodeResource(getResources(), R.drawable.basket);
@@ -49,13 +49,12 @@ public class SimulationView extends View implements SensorEventListener {
         Options opts = new Options();
         opts.inPreferredConfig = Bitmap.Config.RGB_565;
         mField = BitmapFactory.decodeResource(getResources(), R.drawable.field, opts);
-        WindowManager mWindowManager = (WindowManager)
-                context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         mDisplay = mWindowManager.getDefaultDisplay();
         sensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         mSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
     }
-
+    
     @Override
     public void onSizeChanged(int w, int h, int oldw, int oldh) {
         mXOrigin = w * 0.5f;
@@ -63,7 +62,10 @@ public class SimulationView extends View implements SensorEventListener {
         mHorizontalBound = (w - BALL_SIZE) * 0.5f;
         mVerticalBound = (h - BALL_SIZE) * 0.5f;
     }
-
+    
+    /*
+     Get basketball movements
+    */
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -80,13 +82,7 @@ public class SimulationView extends View implements SensorEventListener {
             mSensorTimeStamp = event.timestamp;
         }
     }
-
-
-
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
-
+    
     public void startSimulation() {
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
     }
@@ -100,24 +96,13 @@ public class SimulationView extends View implements SensorEventListener {
   @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         canvas.drawBitmap(mField, 0, 0, null);
         canvas.drawBitmap(mBasket, mXOrigin  - BASKET_SIZE / 2, mYOrigin - BASKET_SIZE / 2, null);
         mBall.updatePosition(mSensorX, mSensorY, mSensorZ, mSensorTimeStamp);
         mBall.resolveCollisionWithBounds(mHorizontalBound, mVerticalBound);
-        canvas.drawBitmap(mBitMAP,
-                (mXOrigin - BALL_SIZE / 2) + mBall.mPosX,
-                (mYOrigin - BALL_SIZE / 2) - mBall.mPosY, null);
+        canvas.drawBitmap(mBitMAP, (mXOrigin - BALL_SIZE / 2) + mBall.mPosX, (mYOrigin - BALL_SIZE / 2) - mBall.mPosY, null);
         float value = (mXOrigin - BALL_SIZE / 2) + mBall.mPosX;
         float value1 = (mYOrigin - BALL_SIZE / 2) - mBall.mPosY;
-      Log.d("draw" , (value + ""));
-      Log.d("draw2" , (value1 + ""));
-
-      invalidate();
-      Log.d("x" , mSensorX + "");
-      Log.d("y" ,  mSensorY + "");
-      Log.d("z" , mSensorZ + "");
-      Log.d("mBallX" , mBall.mPosX + "");
-      Log.d("mBallY" , mBall.mPosY + "");
+        invalidate();
     }
 }
